@@ -1,4 +1,4 @@
-package otpcallassesment1
+package case
 
 type Country struct {
 	Name     string `json:"name"`
