@@ -1,4 +1,4 @@
-package case
+package assesment
 
 type Country struct {
 	Name     string `json:"name"`
