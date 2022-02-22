@@ -2,9 +2,10 @@ package assesment
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"text/template"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Country struct {
@@ -46,21 +47,17 @@ func JSONtoTable(w http.ResponseWriter, data []Country) {
 	}
 }
 
-func JSON() {
-	var c []Country
+func JSON(c *gin.Context) {
+	var flag []Country
 	response, err := http.Get("https://citcall.com/test/countries.json")
 	if err != nil {
-		log.Fatalln(err)
+		return
 	}
-
 	decoder := json.NewDecoder(response.Body)
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&c)
+	err = decoder.Decode(&flag)
 	if err != nil {
-		log.Fatalln("err decoding body")
+		c.String(http.StatusBadRequest, "err decoding body", err)
 	}
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		JSONtoTable(w, c)
-	})
+	JSONtoTable(c.Writer, flag)
 }
